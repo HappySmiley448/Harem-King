@@ -1,0 +1,20 @@
+{
+  "expo": {
+    "name": "Harem King",
+    "slug": "harem-king",
+    "version": "1.0.0",
+    "sdkVersion": "52.0.0",
+    "platforms": ["android"],
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"]
+  }
+}
