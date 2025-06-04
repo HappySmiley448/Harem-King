@@ -1,178 +1,112 @@
-// App.js
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 
-export default function App() {
-  const [screen, setScreen] = useState('welcome');
-  const [userName, setUserName] = useState('');
-  const [userAge, setUserAge] = useState('');
-  const [nsfwEnabled, setNsfwEnabled] = useState(true);
+const Stack = createNativeStackNavigator();
 
-  // Basic validation for age 1-1000
-  const validAge = () => {
-    const ageNum = Number(userAge);
-    return ageNum >= 1 && ageNum <= 1000;
-  };
-
-  const handleStart = () => {
-    if (userName.trim() === '') {
-      alert('Enter your name');
-      return;
-    }
-    if (!validAge()) {
-      alert('Age must be between 1 and 1000');
-      return;
-    }
-    setScreen('createGirl');
-  };
-
-  if (screen === 'welcome') {
-    return (
-      <SafeAreaView style={styles.container}>
-        <Text style={styles.title}>Harem King</Text>
-        <Text style={styles.subtitle}>Rule your kingdom of NSFW AI girls</Text>
-        <TouchableOpacity style={styles.button} onPress={() => setScreen('register')}>
-          <Text style={styles.buttonText}>Enter the Kingdom</Text>
-        </TouchableOpacity>
-      </SafeAreaView>
-    );
-  }
-
-  if (screen === 'register') {
-    return (
-      <SafeAreaView style={styles.container}>
-        <Text style={styles.title}>Register</Text>
-        <TextInput
-          placeholder="Your Name"
-          placeholderTextColor="#aa5777"
-          style={styles.input}
-          value={userName}
-          onChangeText={setUserName}
-        />
-        <TextInput
-          placeholder="Your Age (1-1000)"
-          placeholderTextColor="#aa5777"
-          style={styles.input}
-          value={userAge}
-          onChangeText={setUserAge}
-          keyboardType="numeric"
-          maxLength={4}
-        />
-        <TouchableOpacity style={styles.button} onPress={handleStart}>
-          <Text style={styles.buttonText}>Start</Text>
-        </TouchableOpacity>
-      </SafeAreaView>
-    );
-  }
-
-  if (screen === 'createGirl') {
-    return (
-      <SafeAreaView style={styles.container}>
-        <Text style={styles.title}>Create Your AI Girl</Text>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => alert('To be coded')}
-        >
-          <Text style={styles.buttonText}>Create Girl (Placeholder)</Text>
-        </TouchableOpacity>
-        <View style={{ marginTop: 20 }}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => alert('Chat coming soon')}
-          >
-            <Text style={styles.buttonText}>Go to Chat (Placeholder)</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{ marginTop: 20 }}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => setScreen('settings')}
-          >
-            <Text style={styles.buttonText}>Settings</Text>
-          </TouchableOpacity>
-        </View>
-      </SafeAreaView>
-    );
-  }
-
-  if (screen === 'settings') {
-    return (
-      <SafeAreaView style={styles.container}>
-        <Text style={styles.title}>Settings</Text>
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20 }}>
-          <Text style={{ marginRight: 10, color: '#550022', fontWeight: '600' }}>NSFW Mode</Text>
-          <TouchableOpacity
-            onPress={() => setNsfwEnabled(!nsfwEnabled)}
-            style={[
-              styles.toggle,
-              { backgroundColor: nsfwEnabled ? '#b0004f' : 'gray' },
-            ]}
-          >
-            <Text style={{ color: 'white' }}>{nsfwEnabled ? 'ON' : 'OFF'}</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{ marginTop: 30 }}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => setScreen('createGirl')}
-          >
-            <Text style={styles.buttonText}>Back to Create Girl</Text>
-          </TouchableOpacity>
-        </View>
-      </SafeAreaView>
-    );
-  }
-
+function WelcomeScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
-      <Text>Unknown Screen</Text>
+      <Text style={styles.title}>Welcome to Harem King 💋</Text>
+      <Text style={styles.subtitle}>Your romantic AI kingdom awaits...</Text>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.replace('Home')}
+      >
+        <Text style={styles.buttonText}>Enter the Kingdom</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
 
+function HomeScreen({ navigation }) {
+  return (
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Home - Your Harem Awaits ❤️‍🔥</Text>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate('Chat')}
+      >
+        <Text style={styles.buttonText}>Go to Chat</Text>
+      </TouchableOpacity>
+    </SafeAreaView>
+  );
+}
+
+function ChatScreen() {
+  return (
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Chat with your AI Girls 🥰</Text>
+      <Text style={styles.subtitle}>(Chat functionality coming soon…)</Text>
+    </SafeAreaView>
+  );
+}
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="Welcome"
+        screenOptions={{
+          headerStyle: { backgroundColor: '#FF6F91' },
+          headerTintColor: '#fff',
+          headerTitleStyle: { fontWeight: 'bold' },
+          animation: 'fade',
+        }}
+      >
+        <Stack.Screen
+          name="Welcome"
+          component={WelcomeScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{ title: 'Harem King Home' }}
+        />
+        <Stack.Screen
+          name="Chat"
+          component={ChatScreen}
+          options={{ title: 'Your AI Harem' }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
 const styles = StyleSheet.create({
-  container: { 
-    flex: 1, 
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    padding: 20, 
-    backgroundColor: '#ffe6f0' // soft pink background
+  container: {
+    flex: 1,
+    backgroundColor: '#FFF0F5',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
   },
-  title: { 
-    fontSize: 32, 
-    fontWeight: 'bold', 
-    marginBottom: 10, 
-    color: '#b0004f' // deep rose red
-  },
-  subtitle: { 
-    fontSize: 18, 
-    marginBottom: 20, 
-    textAlign: 'center', 
-    color: '#7a003c' // muted burgundy
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#d97ca1', // warm pink border
-    backgroundColor: '#fff0f5', // lavender blush
-    width: '80%',
-    padding: 12,
+  title: {
+    fontSize: 28,
+    color: '#D72631',
+    fontWeight: '900',
     marginBottom: 15,
-    borderRadius: 15,
-    color: '#550022', // dark rose text
+    textAlign: 'center',
   },
-  toggle: {
-    paddingVertical: 6,
-    paddingHorizontal: 20,
-    borderRadius: 25,
+  subtitle: {
+    fontSize: 18,
+    color: '#FF4E50',
+    marginBottom: 30,
+    textAlign: 'center',
+    fontStyle: 'italic',
   },
   button: {
-    backgroundColor: '#b0004f',
-    paddingVertical: 12,
+    backgroundColor: '#FF355E',
+    paddingVertical: 14,
     paddingHorizontal: 40,
-    borderRadius: 25,
+    borderRadius: 30,
+    elevation: 5,
   },
   buttonText: {
-    color: 'white',
-    fontWeight: '600',
-  }
+    color: '#FFF',
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
 });
