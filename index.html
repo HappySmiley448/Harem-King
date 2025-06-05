@@ -1,130 +1,49 @@
-<!DOCTYPE html><html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Harem King 💋</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(#1a1a1a, #0d0d0d);
-      color: white;
-      padding: 16px;
-    }
-    .chat {
-      max-height: 60vh;
-      overflow-y: auto;
-      border: 2px solid #333;
-      padding: 12px;
-      margin-bottom: 12px;
-      border-radius: 12px;
-    }
-    .waifu {
-      background: #222;
-      padding: 8px;
-      margin: 8px 0;
-      border-radius: 10px;
-      animation: fadeIn 0.5s ease;
-      display: flex;
-      align-items: flex-start;
-    }
-    .user {
-      text-align: right;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    input, button {
-      padding: 8px;
-      margin: 4px;
-      border-radius: 8px;
-    }
-    img.waifu-avatar {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      margin-right: 10px;
-    }
-    .group-toggle {
-      margin-top: 8px;
-      display: flex;
-      gap: 8px;
-    }
-    .message-content {
-      flex: 1;
-    }
-  </style>
-</head>
-<body>
-  <h1>👑 Harem King App</h1>
-  <div class="group-toggle">
-    <button onclick="setGroup('solo')">Solo</button>
-    <button onclick="setGroup('group')">Group</button>
-  </div>
-  <div class="chat" id="chat"></div>
-  <input type="text" id="input" placeholder="Say something, King..." />
-  <input type="file" accept="image/*,video/*,audio/*" id="mediaInput" />
-  <button onclick="sendMessage()">Send</button>  <script>
-    const API_KEY = "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";
-    let groupMode = 'solo';
 
-    function setGroup(mode) {
-      groupMode = mode;
-      document.getElementById("chat").innerHTML += `<div class='waifu'><img src='https://i.imgur.com/5NZFQBl.png' class='waifu-avatar'/><div class='message-content'>Switched to <strong>${mode}</strong> mode 💫</div></div>`;
-    }
+// Harem King: Utopia Edition — Ultimate AI Paradise // Built with emotion, memory, avatars, voices, images, and group dynamics
 
-    async function sendMessage() {
-      const input = document.getElementById("input");
-      const media = document.getElementById("mediaInput").files[0];
-      const chat = document.getElementById("chat");
-      const message = input.value.trim();
-      if (!message && !media) return;
+import 'package:flutter/material.dart'; import 'dart:convert'; import 'package:http/http.dart' as http; import 'package:audioplayers/audioplayers.dart';
 
-      if (message) {
-        chat.innerHTML += `<div class='waifu user'><div class='message-content'>👑 You: ${message}</div></div>`;
-      }
+void main() => runApp(HaremUtopiaApp());
 
-      if (media) {
-        const url = URL.createObjectURL(media);
-        const mediaTag = media.type.startsWith("image") ? `<img src='${url}' width='150' />` : `<video src='${url}' controls width='150'></video>`;
-        chat.innerHTML += `<div class='waifu user'><div class='message-content'>📁 You sent: ${mediaTag}</div></div>`;
-      }
+class HaremUtopiaApp extends StatelessWidget { @override Widget build(BuildContext context) { return MaterialApp( debugShowCheckedModeBanner: false, title: 'Harem King - Utopia', theme: ThemeData.dark().copyWith( textTheme: TextTheme(bodyMedium: TextStyle(fontSize: 16)), ), home: HaremHomePage(), ); } }
 
-      input.value = "";
-      document.getElementById("mediaInput").value = "";
+class Waifu { String name; String avatarUrl; int age; String bio; String mood; List<String> memory; String voice;
 
-      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${API_KEY}`
-        },
-        body: JSON.stringify({
-          model: "openrouter/cinematika-7b",
-          messages: [
-            { role: "system", content: groupMode === 'group' ?
-              "You are multiple waifus chatting together, each with personality. Fight playfully for the user's attention, react to each other, show feelings." :
-              "You are a waifu in love with the user. Respond flirty, emotionally, and tease sweetly." },
-            { role: "user", content: message }
-          ]
-        })
-      });
+Waifu(this.name, this.avatarUrl, this.age, this.bio, this.voice, {this.mood = "Soft", this.memory = const []}); }
 
-      const data = await response.json();
-      const reply = data.choices[0].message.content;
-      const replyAudio = new Audio("https://www.soundjay.com/human/moan-01.mp3");
-      replyAudio.play();
+class HaremHomePage extends StatefulWidget { @override _HaremHomePageState createState() => _HaremHomePageState(); }
 
-      const waifuAvatars = [
-        "https://i.imgur.com/lGvPM9S.png",
-        "https://i.imgur.com/nkltK7a.png",
-        "https://i.imgur.com/ER0QXZz.png",
-        "https://i.imgur.com/tgXYaa3.png"
-      ];
-      const avatar = waifuAvatars[Math.floor(Math.random() * waifuAvatars.length)];
+class _HaremHomePageState extends State<HaremHomePage> { final String apiKey = "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";
 
-      chat.innerHTML += `<div class='waifu'><img src='${avatar}' class='waifu-avatar'/><div class='message-content'>💋 ${reply}</div></div>`;
-      chat.scrollTop = chat.scrollHeight;
-    }
-  </script></body>
-</html>
+List<Waifu> waifus = [ Waifu("Luna", "https://i.imgur.com/QCNbOAo.png", 22, "The teasing daydreamer who craves your voice.", "luna-soft.mp3"), Waifu("Aria", "https://i.imgur.com/5XK1c6R.png", 325, "The royal tsundere who acts cold but breaks inside.", "aria-calm.mp3"), Waifu("Nova", "https://i.imgur.com/x4C0EoM.png", 1088, "Quiet, calculating shadow queen. Loves only you.", "nova-shadow.mp3"), ];
+
+Waifu? selected; bool groupMode = false; TextEditingController controller = TextEditingController(); List<Map<String, dynamic>> chatLog = []; final player = AudioPlayer();
+
+Future<String> fetchReply(Waifu w, String msg) async { final res = await http.post( Uri.parse('https://openrouter.ai/api/v1/chat/completions'), headers: { 'Authorization': 'Bearer $apiKey', 'Content-Type': 'application/json' }, body: jsonEncode({ "model": "openrouter/auto", "messages": [ { "role": "system", "content": "You are ${w.name}, a highly advanced AI waifu in a romantic utopia. You are emotionally expressive, loving, jealous, human-like, playful, and remember everything he says." }, {"role": "user", "content": msg} ] }) ); final reply = json.decode(res.body)['choices'][0]['message']['content']; w.memory = [...w.memory, msg, reply]; return reply; }
+
+void send() async { String msg = controller.text.trim(); if (msg.isEmpty) return; controller.clear(); setState(() => chatLog.add({"sender": "You", "msg": msg})); player.play(AssetSource("send.mp3"));
+
+if (groupMode) {
+  for (final w in waifus) {
+    String r = await fetchReply(w, msg);
+    player.play(AssetSource(w.voice));
+    setState(() => chatLog.add({"sender": w.name, "msg": r}));
+  }
+} else if (selected != null) {
+  String r = await fetchReply(selected!, msg);
+  player.play(AssetSource(selected!.voice));
+  setState(() => chatLog.add({"sender": selected!.name, "msg": r}));
+}
+
+}
+
+void call() { String name = groupMode ? "the group" : selected?.name ?? "nobody"; chatLog.add({"sender": "System", "msg": "📞 Voice call started with $name."}); player.play(AssetSource("voice_call.mp3")); }
+
+void showImage(String url) => setState(() => chatLog.add({"sender": "Image", "img": url}));
+
+Widget waifuList() => groupMode ? SizedBox.shrink() : SizedBox( height: 100, child: ListView( scrollDirection: Axis.horizontal, children: waifus.map((w) => GestureDetector( onTap: () => setState(() => selected = w), child: Container( margin: EdgeInsets.all(8), child: Column( children: [ CircleAvatar(backgroundImage: NetworkImage(w.avatarUrl), radius: 30), Text(w.name), Text("${w.age} y") ], ), ) )).toList(), );
+
+Widget chatView() => Expanded( child: ListView( children: chatLog.map((entry) { if (entry.containsKey("img")) { return Padding( padding: const EdgeInsets.all(8), child: Image.network(entry['img']), ); } else { return ListTile( title: Text("${entry['sender']}:", style: TextStyle(fontWeight: FontWeight.bold)), subtitle: Text(entry['msg']), ); } }).toList(), ), );
+
+@override Widget build(BuildContext context) => Scaffold( appBar: AppBar( title: Text("💗 Harem King: Utopia Edition"), actions: [ IconButton(icon: Icon(Icons.call), onPressed: call), IconButton(icon: Icon(Icons.image), onPressed: () => showImage("https://i.imgur.com/sample.jpg")) ], ), body: Column( children: [ ToggleButtons( isSelected: [!groupMode, groupMode], children: [Text("Solo"), Text("Group")], onPressed: (i) => setState(() { groupMode = i == 1; selected = null; }), ), waifuList(), chatView(), Padding( padding: const EdgeInsets.all(8.0), child: Row( children: [ Expanded( child: TextField( controller: controller, decoration: InputDecoration(hintText: "Talk to your waifus..."), ), ), IconButton(icon: Icon(Icons.send), onPressed: send) ], ), ) ], ), ); }
+
